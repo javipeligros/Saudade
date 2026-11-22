@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#eeede8">
+  <title>Saudade — Cartografías del vacío</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <div class="grain"></div>
+
+  <header class="topbar">
+    <a class="brand" href="./exposicion.html">
+      <span class="brand-name saudade-wordmark">SAUDADE<sup>®</sup></span>
+    </a>
+
+    <div class="topbar-center">
+      <span id="sectionLabel">03 / 03 — TU CARTOGRAFÍA</span>
+    </div>
+
+    <button class="topbar-index" id="resetBtn" type="button">
+      REINICIAR <span>↗</span>
+    </button>
+  </header>
+
+  <main>
+    <section class="screen screen-tool active" id="toolScreen">
+      <div class="tool-heading">
+        <div>
+          <div class="eyebrow"><span>03 — 03</span> / TU CARTOGRAFÍA</div>
+          <h2>La memoria<br>tiene <span>forma.</span></h2>
+        </div>
+        <div class="tool-heading-note">
+          <span class="live-dot"></span>
+          VISUALIZACIÓN EN TIEMPO REAL
+        </div>
+      </div>
+
+      <div class="tool-intro">
+        <p>
+          Has atravesado la ausencia y explorado su archivo. Ahora dale forma
+          a tu propia memoria: cada recuerdo dejará una huella en tu cartografía.
+        </p>
+        <span>MAPA PERSONAL / 001</span>
+      </div>
+
+      <div class="tool-layout">
+        <aside class="tool-sidebar">
+          <div class="form-section">
+            <div class="section-kicker">01 / TU LÍNEA TEMPORAL</div>
+            <label for="birthYear">Año de nacimiento</label>
+            <p class="field-description">
+              Será el punto de partida para situar tus recuerdos.
+            </p>
+            <input id="birthYear" type="number" min="1900" max="2026" placeholder="Ej. 2002">
+            <p class="birth-feedback" id="birthFeedback">Introduce tu año de nacimiento.</p>
+          </div>
+
+          <div class="form-divider"></div>
+
+          <form id="memoryForm">
+            <div class="section-kicker">02 / AÑADIR UNA EXPERIENCIA</div>
+
+            <label for="momentName">¿Qué echas de menos?</label>
+            <input id="momentName" type="text" maxlength="55" placeholder="Nombra ese recuerdo..." required>
+
+            <div class="field-row">
+              <div class="field-half">
+                <label for="momentYear">Año</label>
+                <input id="momentYear" type="number" min="1900" max="2026" placeholder="2020" required>
+              </div>
+              <div class="field-half calculated-age">
+                <label>Edad entonces</label>
+                <div class="age-display" id="calculatedAge">— <small>años</small></div>
+              </div>
+            </div>
+
+            <label class="type-label">¿A qué pertenece?</label>
+            <div class="type-options">
+              <label class="type-option">
+                <input type="radio" name="momentType" value="place" checked>
+                <span class="type-dot place-dot"></span>
+                <span>Lugar</span>
+              </label>
+              <label class="type-option">
+                <input type="radio" name="momentType" value="time">
+                <span class="type-dot time-dot"></span>
+                <span>Tiempo</span>
+              </label>
+              <label class="type-option">
+                <input type="radio" name="momentType" value="bond">
+                <span class="type-dot bond-dot"></span>
+                <span>Vínculo</span>
+              </label>
+            </div>
+
+            <div class="intensity-header">
+              <label for="momentIntensity">¿Cómo te afecta este recuerdo?</label>
+              <output id="intensityOutput" aria-live="polite">Neutro</output>
+            </div>
+            <input id="momentIntensity" class="intensity-range" type="range" min="-100" max="100" step="1" value="0" aria-label="De muy negativo a muy positivo">
+            <div class="affect-scale"><span>− NEGATIVAMENTE</span><span>NEUTRO</span><span>+ POSITIVAMENTE</span></div>
+
+            <button class="add-button" type="submit">
+              <span>Añadir recuerdo</span>
+              <span>＋</span>
+            </button>
+          </form>
+
+          <div class="form-divider"></div>
+
+          <div class="legend">
+            <div class="section-kicker">03 / CÓDIGO CROMÁTICO</div>
+            <div class="legend-item"><span class="legend-color place-color"></span> Lugares <span>01</span></div>
+            <div class="legend-item"><span class="legend-color time-color"></span> Momentos <span>02</span></div>
+            <div class="legend-item"><span class="legend-color bond-color"></span> Vínculos <span>03</span></div>
+          </div>
+        </aside>
+
+        <div class="visual-column">
+          <div class="visual-topline">
+            <span>FIG. 01 — CAMPO DE MEMORIA</span>
+            <span id="waveStatus">SIN DATOS</span>
+          </div>
+
+          <div class="visual-stage" id="waveContainer">
+            <div class="visual-placeholder" id="emptyState">
+              <div class="placeholder-art">
+                <span></span><span></span><span></span>
+              </div>
+              <p>Todo mapa comienza<br>con un recuerdo.</p>
+              <span class="placeholder-caption">AÑADE UNA EXPERIENCIA PARA EMPEZAR</span>
+            </div>
+            <div class="visual-overlay visual-overlay-top">CARTOGRAFÍA PERSONAL</div>
+            <div class="visual-overlay visual-overlay-bottom">
+              <span>ORIGEN</span>
+              <span id="yearRange">—</span>
+              <span>PRESENTE</span>
+            </div>
+          </div>
+
+          <div class="visual-footer">
+            <div><span class="footer-value" id="memoryCounter">00</span><span>RECUERDOS</span></div>
+            <div><span class="footer-value" id="recordCount">00</span><span>EXPERIENCIAS</span></div>
+            <div class="export-controls">
+              <label for="pdfSize">FORMATO DE IMPRESIÓN</label>
+              <select id="pdfSize" aria-label="Tamaño del PDF">
+                <option value="a4">A4 · 210 × 297 mm</option>
+                <option value="a3">A3 · 297 × 420 mm</option>
+              </select>
+              <button id="exportBtn" type="button">DESCARGAR LÁMINA PDF ↗</button>
+            </div>
+          </div>
+
+          <div class="records-panel">
+            <div class="records-header">
+              <div>
+                <div class="section-kicker">ARCHIVO / 001</div>
+                <h3>Atlas de recuerdos<span>.</span></h3>
+              </div>
+              <span id="recordsTotal">0 REGISTROS</span>
+            </div>
+            <div class="records-list" id="recordsList">
+              <p class="records-empty">Todavía no has registrado ningún recuerdo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="journey-nav" aria-label="Navegación del recorrido">
+    <a href="./exposicion.html">← ANTERIOR · ARCHIVO DE LA AUSENCIA</a>
+    <span>03 / 03 · TU CARTOGRAFÍA</span>
+    <a href="./experiencia.html">VOLVER AL INICIO ↗</a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
