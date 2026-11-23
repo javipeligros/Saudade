@@ -1,0 +1,1224 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>SAUDADE® — Archivo de la ausencia</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="styles.css">
+
+  <style>
+    .exhibition-page .journey-back {
+      z-index: 100;
+      pointer-events: auto;
+    }
+
+    .exhibition-page .final-cta {
+      z-index: 1000 !important;
+      pointer-events: auto !important;
+    }
+
+    .exhibition-page #scene {
+      z-index: 0;
+    }
+
+    .exhibition-page #scene canvas {
+      display: block;
+    }
+
+    .exhibition-page .wall-art .reveal {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .exhibition-page .wall-art {
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    .exhibition-page .gallery-arrow {
+      position: fixed;
+      top: auto;
+      bottom: 110px;
+      transform: none;
+      z-index: 9999;
+
+      width: 32px;
+      height: 32px;
+      padding: 4px;
+
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: #000000;
+
+      opacity: 1;
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      transition: opacity 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .exhibition-page .gallery-arrow svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: #000000;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .exhibition-page .gallery-arrow:hover {
+      opacity: 0.5;
+    }
+
+    .exhibition-page .gallery-arrow:focus-visible {
+      outline: 1px solid #000;
+      outline-offset: 4px;
+    }
+
+    .exhibition-page .gallery-arrow:disabled {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+
+    .exhibition-page .gallery-arrow-prev {
+      left: calc(50% - 45px);
+    }
+
+    .exhibition-page .gallery-arrow-next {
+      right: calc(50% - 45px);
+    }
+
+    @media (max-width: 700px) {
+      .exhibition-page .gallery-arrow {
+        bottom: 90px;
+      }
+    }
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+
+<body class="exhibition-page">
+
+  <a class="journey-back" href="./experiencia.html">
+    ← ANTERIOR · EL PASILLO
+  </a>
+
+  <div id="scene"></div>
+
+  <div class="loading" id="loading">
+    <span>PREPARANDO EL ARCHIVO DE LA AUSENCIA...</span>
+  </div>
+
+  <header class="topbar">
+
+    <div class="brand">
+      SAUDADE®
+    </div>
+
+    <div class="top-center micro">
+      Archivo de la ausencia
+      <br>
+      Exposición digital
+    </div>
+
+    <div class="top-right micro">
+      Cartografías del vacío
+      <br>
+      02 / 03
+    </div>
+
+  </header>
+
+  <button
+    class="gallery-arrow gallery-arrow-prev"
+    id="galleryPrev"
+    type="button"
+    aria-label="Ir al apartado anterior"
+    title="Apartado anterior"
+    disabled
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 12H4"></path>
+      <path d="M10 6L4 12L10 18"></path>
+    </svg>
+  </button>
+
+  <button
+    class="gallery-arrow gallery-arrow-next"
+    id="galleryNext"
+    type="button"
+    aria-label="Ir al siguiente apartado"
+    title="Siguiente apartado"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 12H20"></path>
+      <path d="M14 6L20 12L14 18"></path>
+    </svg>
+  </button>
+
+  <footer class="footer">
+
+    <div class="progress-wrap">
+
+      <div class="track">
+        <div class="fill" id="progress"></div>
+      </div>
+
+      <div class="micro">
+        Recorrido expositivo
+      </div>
+
+    </div>
+
+    <div class="scroll-label micro">
+      ← DESLIZA O ARRASTRA PARA RECORRER
+    </div>
+
+    <div class="section-counter micro" id="sectionCounter">
+      01 / 05
+    </div>
+
+  </footer>
+
+  <a
+    class="final-cta"
+    id="finalCTA"
+    href="./cartografia.html"
+    target="_self"
+  >
+    CREAR MI CARTOGRAFÍA ↗
+  </a>
+
+  <div id="panels" style="display:none">
+
+    <section class="wall-art panel-01">
+
+      <div class="kicker small reveal">
+        01 / 05 — CONCEPTO
+      </div>
+
+      <div class="headline reveal d1">
+        <h2 class="display">
+          ¿QUÉ ES<br>
+          LA <span class="black">SAUDADE?</span>
+        </h2>
+      </div>
+
+      <div class="bottom-line hairline reveal d2"></div>
+
+      <div class="description body reveal d3">
+
+        <p>
+          La saudade es una palabra portuguesa que expresa
+          una forma particular de nostalgia: el sentimiento
+          de echar de menos a alguien, un lugar o un tiempo
+          que ya no está presente.
+        </p>
+
+        <p>
+          No es únicamente tristeza. Es también el valor
+          emocional de aquello que permanece en nuestra
+          memoria, incluso cuando ya no podemos recuperarlo.
+        </p>
+
+      </div>
+
+      <div class="big-number number reveal d4">
+        01
+      </div>
+
+    </section>
+
+    <section class="wall-art panel-02">
+
+      <div class="kicker small reveal">
+        02 / 05 — AUSENCIA
+      </div>
+
+      <div class="portrait reveal d1">
+
+        <div class="photo-frame">
+          <img
+            class="photo"
+            src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=900&q=85"
+            alt="Paisaje atravesado por la luz"
+          >
+        </div>
+
+        <div class="photo-caption">
+          FIG. 01 — EL ESPACIO QUE PERMANECE
+        </div>
+
+      </div>
+
+      <div class="headline reveal d2">
+        <h2 class="display medium">
+          LA FORMA<br>
+          DE LA <span class="black">AUSENCIA.</span>
+        </h2>
+      </div>
+
+      <div class="description body reveal d3">
+
+        <p>
+          Hay ausencias que no se pueden explicar con palabras.
+          Se manifiestan en los espacios cotidianos, en los
+          gestos que repetimos y en las cosas que conservamos.
+        </p>
+
+        <p>
+          Lo que ya no está sigue ocupando un lugar dentro
+          de nosotros.
+        </p>
+
+      </div>
+
+      <div class="index tiny reveal d4">
+        ARCHIVO / 002
+      </div>
+
+    </section>
+
+    <section class="wall-art panel-03">
+
+      <div class="kicker small reveal">
+        03 / 05 — MEMORIA
+      </div>
+
+      <div class="headline reveal d1">
+        <h2 class="display medium">
+          RECORDAR<br>
+          ES <span class="black">RECONSTRUIR.</span>
+        </h2>
+      </div>
+
+      <div class="photo-one reveal d2">
+
+        <div class="photo-frame">
+          <img
+            class="photo"
+            src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=900&q=85"
+            alt="Paisaje de montaña"
+          >
+        </div>
+
+        <div class="photo-caption">
+          FIG. 02 — PAISAJE INTERIOR
+        </div>
+
+      </div>
+
+      <div class="photo-two reveal d3">
+
+        <div class="photo-frame">
+          <img
+            class="photo"
+            src="https://images.unsplash.com/photo-1448375240586-882707db888b?w=900&q=85"
+            alt="Bosque"
+            loading="eager"
+          >
+        </div>
+
+        <div class="photo-caption">
+          FIG. 03 — FRAGMENTO
+        </div>
+
+      </div>
+
+      <div class="description body small-body reveal d4">
+
+        <p>
+          La memoria no funciona como un archivo exacto.
+          Cada vez que recordamos, reinterpretamos aquello
+          que vivimos.
+        </p>
+
+        <p>
+          Los recuerdos cambian con nosotros y adquieren
+          nuevas formas con el paso del tiempo.
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="wall-art panel-04">
+
+      <div class="kicker small reveal">
+        04 / 05 — HUELLAS
+      </div>
+
+      <div class="photo-main reveal d1">
+
+        <div class="photo-frame">
+          <img
+            class="photo"
+            src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1000&q=85"
+            alt="Mar y horizonte"
+          >
+        </div>
+
+        <div class="photo-caption">
+          FIG. 04 — RASTROS DE UNA AUSENCIA
+        </div>
+
+      </div>
+
+      <div class="headline reveal d2">
+        <h2 class="display medium">
+          LO QUE<br>
+          <span class="black">QUEDA.</span>
+        </h2>
+      </div>
+
+      <div class="rule hairline reveal d3"></div>
+
+      <div class="description body small-body reveal d4">
+
+        <p>
+          Una ausencia no siempre se percibe como un espacio
+          completamente vacío. A veces se manifiesta a través
+          de pequeños rastros: una fotografía, una habitación,
+          un objeto o una costumbre que permanece.
+        </p>
+
+      </div>
+
+    </section>
+
+    <section class="wall-art panel-05">
+
+      <div class="kicker small reveal">
+        05 / 05 — PARTICIPACIÓN
+      </div>
+
+      <div class="headline reveal d1">
+        <h2 class="display">
+          EL RECUERDO<br>
+          <span class="black">DEJA</span><br>
+          HUELLA.
+        </h2>
+      </div>
+
+      <div class="description body reveal d3">
+
+        <p>
+          Cada persona guarda un mapa invisible de lugares,
+          vínculos y momentos.
+        </p>
+
+        <p>
+          En la siguiente experiencia podrás convertir tus
+          recuerdos en una cartografía de tinta, donde cada
+          huella tendrá una forma propia.
+        </p>
+
+      </div>
+
+      <div class="index number reveal d2">
+        05
+      </div>
+
+    </section>
+
+  </div>
+
+  <script type="module">
+
+    import * as THREE from "three";
+
+    import {
+      CSS3DRenderer,
+      CSS3DObject
+    } from "three/addons/renderers/CSS3DRenderer.js";
+
+    const PANEL_WIDTH = 1150;
+    const PANEL_HEIGHT = 650;
+
+    const UNIT = 0.01;
+    const PANEL_GAP = 1.7;
+    const COUNT = 5;
+
+    const WORLD_WIDTH =
+      PANEL_WIDTH * UNIT;
+
+    const TOTAL_WIDTH =
+      COUNT * WORLD_WIDTH +
+      (COUNT - 1) * PANEL_GAP;
+
+    const START =
+      -TOTAL_WIDTH / 2 +
+      WORLD_WIDTH / 2;
+
+    const CAMERA_Y = 4.7;
+    const CAMERA_Z = 14.8;
+    const CAMERA_LOOK_Y = 3.1;
+
+    const PANEL_OFFSET_Y = -1.2;
+
+    const FLOOR_COLOR = "#f1f0ec";
+
+    const SHADOW_OPACITY = 0.20;
+
+    const SHADOW_Z = 2.7;
+
+    const scene = new THREE.Scene();
+
+    scene.background =
+      new THREE.Color(FLOOR_COLOR);
+
+    const camera = new THREE.PerspectiveCamera(
+      40,
+      innerWidth / innerHeight,
+      0.1,
+      300
+    );
+
+    camera.position.set(
+      START,
+      CAMERA_Y,
+      CAMERA_Z
+    );
+
+    camera.lookAt(
+      START,
+      CAMERA_LOOK_Y,
+      0
+    );
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: false
+    });
+
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio, 2)
+    );
+
+    renderer.setSize(
+      innerWidth,
+      innerHeight
+    );
+
+    renderer.outputColorSpace =
+      THREE.SRGBColorSpace;
+
+    renderer.toneMapping =
+      THREE.NoToneMapping;
+
+    renderer.setClearColor(
+      FLOOR_COLOR,
+      1
+    );
+
+    const sceneElement =
+      document.querySelector("#scene");
+
+    sceneElement.appendChild(
+      renderer.domElement
+    );
+
+    const cssRenderer =
+      new CSS3DRenderer();
+
+    cssRenderer.setSize(
+      innerWidth,
+      innerHeight
+    );
+
+    cssRenderer.domElement.style.cssText = `
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    `;
+
+    sceneElement.appendChild(
+      cssRenderer.domElement
+    );
+
+    const cssScene = new THREE.Scene();
+
+    const floor = new THREE.Mesh(
+
+      new THREE.PlaneGeometry(
+        TOTAL_WIDTH + 100,
+        200
+      ),
+
+      new THREE.MeshBasicMaterial({
+        color: FLOOR_COLOR,
+        side: THREE.DoubleSide
+      })
+
+    );
+
+    floor.rotation.x =
+      -Math.PI / 2;
+
+    floor.position.set(
+      0,
+      0,
+      0
+    );
+
+    scene.add(floor);
+
+    function createShadowTexture() {
+
+      const canvas =
+        document.createElement("canvas");
+
+      canvas.width = 512;
+      canvas.height = 512;
+
+      const ctx =
+        canvas.getContext("2d");
+
+      const gradient =
+        ctx.createRadialGradient(
+          256,
+          256,
+          0,
+          256,
+          256,
+          256
+        );
+
+      gradient.addColorStop(
+        0,
+        "rgba(0,0,0,0.25)"
+      );
+
+      gradient.addColorStop(
+        0.18,
+        "rgba(0,0,0,0.18)"
+      );
+
+      gradient.addColorStop(
+        0.42,
+        "rgba(0,0,0,0.10)"
+      );
+
+      gradient.addColorStop(
+        0.68,
+        "rgba(0,0,0,0.03)"
+      );
+
+      gradient.addColorStop(
+        1,
+        "rgba(0,0,0,0)"
+      );
+
+      ctx.fillStyle = gradient;
+
+      ctx.fillRect(
+        0,
+        0,
+        512,
+        512
+      );
+
+      const texture =
+        new THREE.CanvasTexture(canvas);
+
+      texture.colorSpace =
+        THREE.SRGBColorSpace;
+
+      return texture;
+
+    }
+
+    const shadowTexture =
+      createShadowTexture();
+
+    function createFloorShadow({
+      x,
+      z = SHADOW_Z,
+      width = 8.5,
+      depth = 4.2,
+      opacity = SHADOW_OPACITY
+    }) {
+
+      const geometry =
+        new THREE.PlaneGeometry(
+          width,
+          depth
+        );
+
+      const material =
+        new THREE.MeshBasicMaterial({
+          map: shadowTexture,
+          transparent: true,
+          opacity: opacity,
+          depthWrite: false,
+          side: THREE.DoubleSide,
+          toneMapped: false
+        });
+
+      const shadow = new THREE.Mesh(
+        geometry,
+        material
+      );
+
+      shadow.rotation.x =
+        -Math.PI / 2;
+
+      shadow.position.set(
+        x,
+        0.035,
+        z
+      );
+
+      shadow.renderOrder = 2;
+
+      scene.add(shadow);
+
+      return shadow;
+
+    }
+
+    const shadowLayouts = [
+
+      {
+        offsetX: 0,
+        width: 8.5,
+        depth: 4.2
+      },
+
+      {
+        offsetX: 0,
+        width: 8.5,
+        depth: 4.2
+      },
+
+      {
+        offsetX: 0,
+        width: 8.5,
+        depth: 4.2
+      },
+
+      {
+        offsetX: 0,
+        width: 8.5,
+        depth: 4.2
+      },
+
+      {
+        offsetX: 0,
+        width: 8.5,
+        depth: 4.2
+      }
+
+    ];
+
+    const elements = [
+      ...document.querySelectorAll(
+        "#panels > .wall-art"
+      )
+    ];
+
+    const panelPositions = [];
+
+    elements.forEach((el, i) => {
+
+      const x =
+        START +
+        i * (WORLD_WIDTH + PANEL_GAP);
+
+      const obj =
+        new CSS3DObject(el);
+
+      obj.position.set(
+        x,
+        CAMERA_Y + PANEL_OFFSET_Y,
+        0.035
+      );
+
+      obj.scale.setScalar(UNIT);
+
+      cssScene.add(obj);
+
+      panelPositions.push(x);
+
+      el.classList.add("is-visible");
+
+      const layout =
+        shadowLayouts[i];
+
+      createFloorShadow({
+        x: x + layout.offsetX,
+        z: SHADOW_Z,
+        width: layout.width,
+        depth: layout.depth,
+        opacity: SHADOW_OPACITY
+      });
+
+    });
+
+    const MOBILE_EXTRA_SCROLL = 4;
+
+    const INITIAL_X =
+      window.innerWidth <= 700
+        ? START - MOBILE_EXTRA_SCROLL
+        : START;
+
+    let targetX = INITIAL_X;
+    let currentX = INITIAL_X;
+
+    const MIN = panelPositions[0] -
+      (window.innerWidth <= 700 ? MOBILE_EXTRA_SCROLL : 0);
+
+    const MAX = panelPositions.at(-1);
+
+    function move(amount) {
+
+      targetX = THREE.MathUtils.clamp(
+        targetX + amount,
+        MIN,
+        MAX
+      );
+
+    }
+
+    const prevButton =
+      document.querySelector("#galleryPrev");
+
+    const nextButton =
+      document.querySelector("#galleryNext");
+
+    function getClosestPanelIndex(x) {
+
+      let closest = 0;
+      let minDistance = Infinity;
+
+      panelPositions.forEach((position, i) => {
+
+        const distance =
+          Math.abs(x - position);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closest = i;
+        }
+
+      });
+
+      return closest;
+
+    }
+
+    function goToPanel(index) {
+
+      const safeIndex =
+        THREE.MathUtils.clamp(
+          index,
+          0,
+          COUNT - 1
+        );
+
+      targetX =
+        panelPositions[safeIndex];
+
+      updateArrowState();
+
+    }
+
+    function updateArrowState() {
+
+      const index =
+        getClosestPanelIndex(targetX);
+
+      prevButton.disabled =
+        index === 0;
+
+      nextButton.disabled =
+        index === COUNT - 1;
+
+    }
+
+    prevButton.addEventListener(
+      "click",
+      () => {
+
+        const index =
+          getClosestPanelIndex(targetX);
+
+        goToPanel(index - 1);
+
+      }
+    );
+
+    nextButton.addEventListener(
+      "click",
+      () => {
+
+        const index =
+          getClosestPanelIndex(targetX);
+
+        goToPanel(index + 1);
+
+      }
+    );
+
+    updateArrowState();
+
+    addEventListener("wheel", (e) => {
+
+      if (
+        Math.abs(e.deltaX) > 0.5
+      ) {
+
+        e.preventDefault();
+
+        move(
+          e.deltaX * 0.009
+        );
+
+        updateArrowState();
+
+      }
+
+    }, {
+      passive: false
+    });
+
+    const dragSurface =
+      document.querySelector("#scene");
+
+    let dragging = false;
+    let lastPointerX = 0;
+    let dragPointerId = null;
+
+    dragSurface.style.cursor =
+      "grab";
+
+    dragSurface.addEventListener(
+      "pointerdown",
+      (e) => {
+
+        if (
+          e.pointerType !== "mouse" ||
+          e.button !== 0
+        ) {
+          return;
+        }
+
+        dragging = true;
+
+        dragPointerId =
+          e.pointerId;
+
+        lastPointerX =
+          e.clientX;
+
+        dragSurface.style.cursor =
+          "grabbing";
+
+        dragSurface.setPointerCapture(
+          e.pointerId
+        );
+
+      }
+    );
+
+    dragSurface.addEventListener(
+      "pointermove",
+      (e) => {
+
+        if (
+          !dragging ||
+          e.pointerId !== dragPointerId
+        ) {
+          return;
+        }
+
+        const dx =
+          e.clientX - lastPointerX;
+
+        move(
+          -dx * 0.035
+        );
+
+        lastPointerX =
+          e.clientX;
+
+        updateArrowState();
+
+      }
+    );
+
+    function stopDrag() {
+
+      dragging = false;
+
+      dragPointerId = null;
+
+      dragSurface.style.cursor =
+        "grab";
+
+    }
+
+    dragSurface.addEventListener(
+      "pointerup",
+      stopDrag
+    );
+
+    dragSurface.addEventListener(
+      "pointercancel",
+      stopDrag
+    );
+
+    dragSurface.addEventListener(
+      "lostpointercapture",
+      stopDrag
+    );
+
+    addEventListener("keydown", (e) => {
+
+      if (
+        ["ArrowRight", "ArrowLeft"].includes(
+          e.key
+        )
+      ) {
+
+        e.preventDefault();
+
+        const index =
+          getClosestPanelIndex(targetX);
+
+        goToPanel(
+          index + (
+            e.key === "ArrowRight"
+              ? 1
+              : -1
+          )
+        );
+
+      }
+
+    });
+
+    let touchX = null;
+
+    addEventListener(
+      "touchstart",
+      (e) => {
+
+        touchX =
+          e.touches[0]?.clientX ?? null;
+
+      },
+      {
+        passive: true
+      }
+    );
+
+    addEventListener(
+      "touchmove",
+      (e) => {
+
+        if (
+          touchX === null ||
+          !e.touches.length
+        ) {
+          return;
+        }
+
+        const x =
+          e.touches[0].clientX;
+
+        move(
+          (touchX - x) * 0.035
+        );
+
+        touchX = x;
+
+        updateArrowState();
+
+      },
+      {
+        passive: true
+      }
+    );
+
+    addEventListener(
+      "touchend",
+      () => {
+
+        touchX = null;
+
+      }
+    );
+
+    const progress =
+      document.querySelector("#progress");
+
+    const counter =
+      document.querySelector("#sectionCounter");
+
+    const cta =
+      document.querySelector("#finalCTA");
+
+    const clock =
+      new THREE.Clock();
+
+    function animate() {
+
+      requestAnimationFrame(
+        animate
+      );
+
+      const dt = Math.min(
+        clock.getDelta(),
+        0.05
+      );
+
+      currentX =
+        THREE.MathUtils.damp(
+          currentX,
+          targetX,
+          2.8,
+          dt
+        );
+
+      camera.position.x =
+        currentX;
+
+      camera.lookAt(
+        currentX,
+        CAMERA_LOOK_Y,
+        0
+      );
+
+      const closest =
+        getClosestPanelIndex(currentX);
+
+      const fraction =
+        (currentX - panelPositions[0]) /
+        (MAX - panelPositions[0]);
+
+      progress.style.width =
+        `${THREE.MathUtils.clamp(fraction, 0, 1) * 100}%`;
+
+      counter.textContent =
+        `${String(closest + 1).padStart(2, "0")} / 05`;
+
+      cta.classList.toggle(
+        "visible",
+        fraction > 0.94
+      );
+
+      updateArrowState();
+
+      renderer.render(
+        scene,
+        camera
+      );
+
+      cssRenderer.render(
+        cssScene,
+        camera
+      );
+
+    }
+
+    animate();
+
+    function resize() {
+
+      const isMobile =
+        innerWidth <= 700;
+
+      camera.aspect =
+        innerWidth / innerHeight;
+
+      // Campo de visión reducido para
+      // que los paneles se vean más grandes.
+      camera.fov = 40;
+
+      // Cámara más cercana solo en móvil.
+      camera.position.z =
+        isMobile
+          ? 9.5
+          : CAMERA_Z;
+
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(
+        innerWidth,
+        innerHeight
+      );
+
+      renderer.setPixelRatio(
+        Math.min(
+          devicePixelRatio,
+          2
+        )
+      );
+
+      cssRenderer.setSize(
+        innerWidth,
+        innerHeight
+      );
+
+    }
+
+    addEventListener(
+      "resize",
+      resize
+    );
+
+    resize();
+
+    cta.addEventListener(
+      "click",
+      () => {
+
+        try {
+
+          sessionStorage.setItem(
+            "saudadeExhibitionCompleted",
+            "true"
+          );
+
+        } catch (e) {
+        }
+
+      }
+    );
+
+    document.querySelector(
+      "#loading"
+    ).classList.add(
+      "hidden"
+    );
+
+  </script>
+
+</body>
+</html>
